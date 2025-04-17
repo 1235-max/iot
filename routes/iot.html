@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .dashboard {
+      max-width: 800px;
+      margin: auto;
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .logout-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 15px;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .logout-btn:hover {
+      background-color: #b52a37;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>Welcome, <%= user.username %> (Doctor)</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Field 1</th>
+          <th>Field 2</th>
+          <th>Field 3</th>
+        </tr>
+      </thead>
+      <tbody id="vitalsTable">
+        <tr><td colspan="4">Loading vitals...</td></tr>
+      </tbody>
+    </table>
+
+    <form action="/auth/logout" method="POST">
+      <button class="logout-btn" type="submit">Logout</button>
+    </form>
+  </div>
+
+  <script>
+    // Fetch vitals from backend
+    fetch('/doctor/vitals')
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById('vitalsTable');
+        tbody.innerHTML = '';
+        data.forEach(feed => {
+          const row = `
+            <tr>
+              <td>${feed.created_at}</td>
+              <td>${feed.field1 || '-'}</td>
+              <td>${feed.field2 || '-'}</td>
+              <td>${feed.field3 || '-'}</td>
+            </tr>
+          `;
+          tbody.innerHTML += row;
+        });
+      })
+      .catch(err => {
+        document.getElementById('vitalsTable').innerHTML = '<tr><td colspan="4">Failed to load vitals</td></tr>';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>

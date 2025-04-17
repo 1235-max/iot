@@ -1,0 +1,21 @@
+<!-- Doctor Dashboard Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <h1>Welcome, <%= user.username %> (Doctor)</h1>
+  <h2>Registered Patients</h2>
+  <ul>
+    <% patients.forEach(patient => { %>
+      <li><%= patient.username %></li>
+    <% }) %>
+  </ul>
+  <form action="/auth/logout" method="POST">
+    <button type="submit">Logout</button>
+  </form>
+</body>
+</html>
